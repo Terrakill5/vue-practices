@@ -6,6 +6,7 @@ const store = createStore({
     state(){
         return {
             coaches:null,
+            filtroCoach: null,
             requests: [{
                 coachId: null,
                 message: "",

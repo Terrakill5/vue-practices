@@ -1,11 +1,12 @@
 <template>
     <header>
+      <nav>
         <h1>
             <router-link to="/coaches">{{title}}</router-link>
         </h1>
-        <nav>
+        
         <ul>
-            <li><router-link to="/coaches">Coaches</router-link></li>
+            <li><router-link to="/coaches">All Coaches</router-link></li>
             <li><router-link to="/requests"> Requests</router-link></li>
         </ul>
         </nav>
