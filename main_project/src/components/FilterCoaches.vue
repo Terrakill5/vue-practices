@@ -2,48 +2,54 @@
     <input
       checked="true"
       id="frontend"
-      name="especial"
       type="checkbox"
-      value="frontend"
-      v-model="especial"
+      @change="setFilter"
     />
     <label for="frontend">Frontend</label>
     <input
       checked="true"
       id="backend"
-      name="especial"
       type="checkbox"
-      value="backend"
-      v-model="especial"
+      @change="setFilter"
     />
     <label for="backend">Backend</label>
     <input
       checked="true"
       id="career"
-      name="especial"
       type="checkbox"
-      value="career"
-      v-model="especial"
+      @change="setFilter"
     />
     <label for="career">Career</label>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
-
+  emits: ["change-filter"],
     data() {
         return {
-            especial: ["career","frontend","backend"],
-        }
+            filters: {
+              frontend: true,
+              backend: true,
+              career: true
+            }
+        };
         
     },
-    watch: {
-        especial(val) {
-            this.especial = val;
-            //this.$store.commit("actualizarFiltro", this.especial);
-            console.log(this.especial);
-            
-        }
+    computed: {
+      ...mapGetters(["filtro"]),
+    },
+    methods: {
+      setFilter(event) {
+        const inputId = event.target.id;
+        const isActive = event.target.checked;
+        const updatedFilters = {
+          ...this.filters,
+          [inputId]: isActive
+        };
+        this.filters = updatedFilters;
+        this.$emit("change-filter", updatedFilters);
+      }
     }
 }
 </script>

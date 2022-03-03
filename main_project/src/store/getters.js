@@ -6,9 +6,8 @@ export default {
         return state.requests;
     },
     hayCoaches(state) {
+        console.log(state.coaches);
+        //console.log(state.coaches.length);
         return state.coaches && state.coaches.length > 0;
     },
-    filtro(state) {
-        return state.filtroCoach;
-    }
 }

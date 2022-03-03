@@ -1,7 +1,7 @@
 <template>
   <section>
     <h2>Find your Coach</h2>
-    <filter-coaches></filter-coaches>
+    <filter-coaches @change-filter="setFilters"></filter-coaches>
   </section>
   <section>
     <base-card>
@@ -16,9 +16,9 @@
         </base-button>
         
       </div>
-      <ul v-if="!hayCoaches">
+      <ul v-if="hayCoaches">
         <coach-item
-          v-for="coach in coaches"
+          v-for="coach in filteredCoaches"
           :key="coach.id"
           :id="coach.id"
           :firstName="coach.firstName"
@@ -39,21 +39,46 @@ import { mapGetters } from 'vuex';
 import FilterCoaches from '../../components/FilterCoaches.vue';
 
 export default {
+  data() {
+    return {
+      activeFilters: {
+        frontend: true,
+        backend: true,
+        career: true
+      }
+    };
+  },
   components: {
     CoachItem,
     FilterCoaches,
   },
   computed: {
-    ...mapGetters(['coaches', 'hayCoaches']),
+    ...mapGetters(['coaches', 'hayCoaches', "filtro"]),
+    filteredCoaches() {
+      return this.coaches.filter(coach => {
+        if (this.activeFilters.frontend && coach.especialization.includes("frontend")) {
+          return true;
+        }
+        if (this.activeFilters.backend && coach.especialization.includes("backend")) {
+          return true;
+        }
+        if (this.activeFilters.career && coach.especialization.includes("career")) {
+          return true;
+        }
+        return false;
+      })
+    }
   },
   methods: {
     async loadCoaches() {
       const res = await axios.get(
         'https://vue-http-demo-ce2b5-default-rtdb.firebaseio.com/surveys.json'
       );
-      //this.results = {...res.data};
-      this.$store.commit('actualizarCoaches', { ...res.data });
-      //console.log(this.coaches);
+      const array = Object.values(res.data);
+      this.$store.dispatch('actualizarCoaches',  array );
+    },
+    setFilters(updatedFilters) {
+      this.activeFilters = updatedFilters;
     },
   },
   mounted() {

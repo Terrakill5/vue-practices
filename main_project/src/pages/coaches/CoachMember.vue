@@ -38,11 +38,12 @@ export default {
         contactLink() {
       //return '/contact/' + this.id;
       return {
-        name: 'contact',
+        path: 'contact',
         params: { id: this.id },
       }; 
     },
         obtenerCoach(){
+          console.log(this.coaches);
              for (let i in this.coaches) {
                 if (this.id === this.coaches[i].id) {
                     this.coach = this.coaches[i];

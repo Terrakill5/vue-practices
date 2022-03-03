@@ -1,12 +1,12 @@
 import { createStore } from 'vuex';
 import rootGetters from "./getters.js";
 import rootMutations from "./mutations.js";
+import rootActions from "./actions.js";
 
 const store = createStore({
     state(){
         return {
             coaches:null,
-            filtroCoach: null,
             requests: [{
                 coachId: null,
                 message: "",
@@ -16,6 +16,7 @@ const store = createStore({
     },
     mutations: rootMutations,
     getters: rootGetters,
+    actions: rootActions,
 });
 
 export default store;
