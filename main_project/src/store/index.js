@@ -7,11 +7,8 @@ const store = createStore({
     state(){
         return {
             coaches:null,
-            requests: [{
-                coachId: null,
-                message: "",
-                email: "",
-            }]
+            requests: null,
+            userId: null
         }
     },
     mutations: rootMutations,

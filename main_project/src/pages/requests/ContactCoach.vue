@@ -2,7 +2,7 @@
   <form @submit.prevent="submitRequest">
     <div
       class="form-control"
-      :class="{ invalid: userEmailValidity === 'invalid' }"
+      :class="{ errors: userEmailValidity === 'invalid' }"
     >
       <label for="email">Your Email</label>
       <input
@@ -16,7 +16,7 @@
     </div>
     <div
       class="form-control"
-      :class="{ invalid: userTextValidity === 'invalid' }"
+      :class="{ errors: userTextValidity === 'invalid' }"
     >
       <label for="text">Your Commentary</label>
       <textarea rows="5" id="text" v-model.trim="enteredText"
@@ -59,6 +59,7 @@ export default {
       }
       },
       submitRequest(){
+        //console.log(this.$route.params.id);
         this.validacionEmail();
         this.validacionText();
         if (this.userEmailValidity === "valid" && this.userTextValidity === "valid") {
@@ -68,11 +69,12 @@ export default {
             id: new Date().toISOString(),
             email: this.enteredEmail,
             text: this.enteredText,
-            coachId: this.id,
+            coachId: this.$route.params.id,
           }
         );
         this.enteredEmail = '';
         this.enteredText = '';
+        this.$router.replace("/coaches");
         }
       },
     },

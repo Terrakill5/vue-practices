@@ -10,6 +10,7 @@
     <div class="actions">
          <base-button mode="outline" link :to="contactLink">Contact</base-button>
     </div>
+    <router-view></router-view>
    
       </base-card>
       
@@ -32,18 +33,19 @@ export default {
         fullName() {
       return this.coach.firstName + ' ' + this.coach.lastName;
     },
-        
-    },
-    methods: {
-        contactLink() {
+    contactLink() {
       //return '/contact/' + this.id;
       return {
-        path: 'contact',
+        name: 'contact',
         params: { id: this.id },
       }; 
     },
+        
+    },
+    methods: {
+        
         obtenerCoach(){
-          console.log(this.coaches);
+          //console.log(this.coaches);
              for (let i in this.coaches) {
                 if (this.id === this.coaches[i].id) {
                     this.coach = this.coaches[i];

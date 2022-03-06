@@ -1,7 +1,8 @@
 <template>
   <section>
-    <h2>Find your Coach</h2>
-    <filter-coaches @change-filter="setFilters"></filter-coaches>
+      <h2>Find your Coach</h2>
+      <filter-coaches @change-filter="setFilters"></filter-coaches>
+    
   </section>
   <section>
     <base-card>

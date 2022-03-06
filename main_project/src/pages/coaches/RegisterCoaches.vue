@@ -146,6 +146,7 @@ export default {
         this.enteredDesc = '';
         this.enteredRate = '';
         this.enteredEspec = null;
+        this.$router.replace("/coaches");
       } 
     },
   },

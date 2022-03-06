@@ -29,11 +29,11 @@ export default {
       }; 
     },
     contactLink() {
-      return '/contact/' + this.id;
-      /* {
+      //return '/contact/' + this.id;
+       return {
         name: 'contact',
         params: { id: this.id },
-      }; */
+      }; 
     },
   },
 };
