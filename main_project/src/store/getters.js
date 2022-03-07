@@ -3,8 +3,9 @@ export default {
         return state.coaches;
     },
     requests(state) {
-        const coachId = state.userId
-        return state.requests.filter(req => req.coachId === coachId);
+        /* const coachId = state.userId
+        return state.requests.filter(req => req.coachId === coachId); */
+        return state.requests;
     },
     hayCoaches(state) {
         //console.log(state.coaches);

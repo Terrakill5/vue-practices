@@ -1,4 +1,7 @@
 <template>
+<base-dialog :show="!!error" title="An error occurred!" @close="handleError">
+<p>{{ error }}</p>
+</base-dialog>
   <section>
       <h2>Find your Coach</h2>
       <filter-coaches @change-filter="setFilters"></filter-coaches>
@@ -17,7 +20,10 @@
         </base-button>
         
       </div>
-      <ul v-if="hayCoaches">
+      <div v-if="isLoading">
+        <base-spinner></base-spinner>
+      </div>
+      <ul v-else-if="hayCoachesAca">
         <coach-item
           v-for="coach in filteredCoaches"
           :key="coach.id"
@@ -42,6 +48,8 @@ import FilterCoaches from '../../components/FilterCoaches.vue';
 export default {
   data() {
     return {
+      error: null,
+      isLoading: false,
       activeFilters: {
         frontend: true,
         backend: true,
@@ -55,6 +63,9 @@ export default {
   },
   computed: {
     ...mapGetters(['coaches', 'hayCoaches', "filtro"]),
+    hayCoachesAca(){
+      return !this.isLoading && this.hayCoaches
+    },
     filteredCoaches() {
       return this.coaches.filter(coach => {
         if (this.activeFilters.frontend && coach.especialization.includes("frontend")) {
@@ -72,15 +83,31 @@ export default {
   },
   methods: {
     async loadCoaches() {
-      const res = await axios.get(
+      this.isLoading = true;
+      try {
+        const res = await axios.get(
         'https://vue-http-demo-ce2b5-default-rtdb.firebaseio.com/surveys.json'
       );
       const array = Object.values(res.data);
       this.$store.dispatch('actualizarCoaches',  array );
+      } catch (error) {
+        this.error = error.message || "something went wrong";
+      }
+      
+      //console.dir(res);
+      /* if (res.statusText !== "OK") {
+        const error = new Error(res.statusText || "Failed to fetch!");
+        throw error;
+      } */
+      
+      this.isLoading = false;
     },
     setFilters(updatedFilters) {
       this.activeFilters = updatedFilters;
     },
+    handleError() {
+      this.error = null;
+    }
   },
   mounted() {
     this.loadCoaches();

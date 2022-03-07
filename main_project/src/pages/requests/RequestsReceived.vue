@@ -1,19 +1,25 @@
 <template>
-<base-card>
-  <header>
-    <h3>Request Received</h3>
-  </header>
-  <ul v-if="hayRequests">
-    <request-item
-      v-for="request in requests"
-      :key="request.id"
-      :id="request.id"
-      :email="request.email"
-      :text="request.text"
-    ></request-item>
-  </ul>
-  <h3 v-else>No requests found.</h3>
-</base-card>
+  <base-dialog :show="!!error" title="An error occurred!" @close="handleError">
+    <p>{{ error }}</p>
+  </base-dialog>
+  <base-card>
+    <header>
+      <h3>Request Received</h3>
+    </header>
+    <div v-if="isLoading">
+      <base-spinner></base-spinner>
+    </div>
+    <ul v-else-if="hayRequestsAca">
+      <request-item
+        v-for="request in requests"
+        :key="request.id"
+        :id="request.id"
+        :email="request.email"
+        :text="request.text"
+      ></request-item>
+    </ul>
+    <h3 v-else>No requests found.</h3>
+  </base-card>
 </template>
 
 <script>
@@ -25,27 +31,40 @@ export default {
     RequestItem,
   },
   computed: {
-      ...mapGetters(["requests", "hayRequests"]),
-      
-  },
-  data() {
-      return {
-
-      }
-  },
-  methods: {
-      async loadRequest() {
-      const res = await axios.get(
-        'https://vue-http-demo-ce2b5-default-rtdb.firebaseio.com/request.json'
-      );
-      const array = Object.values(res.data); //pasa todos los objetos en un array 
-      //console.log(array);
-      this.$store.dispatch('actualizarRequests',  array );
+    ...mapGetters(['requests', 'hayRequests']),
+    hayRequestsAca(){
+      return !this.isLoading && this.hayRequests
     },
   },
-  mounted(){
-      this.loadRequest();
-  }
+  data() {
+    return {
+      isLoading: false,
+      error: null,
+    };
+  },
+  methods: {
+    async loadRequest() {
+      this.isLoading = true;
+      try {
+        const res = await axios.get(
+          'https://vue-http-demo-ce2b5-default-rtdb.firebaseio.com/request.json'
+        );
+        console.log(res);
+        const array = Object.values(res.data); //pasa todos los objetos en un array
+        console.log(array);
+        this.$store.dispatch('actualizarRequests', array);
+      } catch (error) {
+        this.error = error.message || 'something went wrong';
+      }
+      this.isLoading = false;
+    },
+    handleError() {
+      this.error = null;
+    }
+  },
+  mounted() {
+    this.loadRequest();
+  },
 };
 </script>
 
