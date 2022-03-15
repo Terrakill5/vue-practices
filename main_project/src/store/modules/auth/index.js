@@ -4,7 +4,6 @@ import getters from "./getters.js";
 
 
 export default {
-    namespaced: true,
     state() {
         return {
             userId: null,
@@ -13,6 +12,6 @@ export default {
         };
     },
     mutations,
-    actions,
+    actions: {...actions},
     getters
 };

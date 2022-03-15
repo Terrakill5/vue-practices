@@ -1,9 +1,4 @@
-
-
 export default {
-    login() {
-
-    },
     async signup(context, payload) {
         const res = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAQJpPdlCa9RdgOEXCkKEezntqxykywoDs", {
             method: "POST",
