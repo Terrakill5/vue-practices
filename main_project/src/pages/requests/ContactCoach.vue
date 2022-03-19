@@ -33,6 +33,7 @@
 
 <script>
 import axios from 'axios'; // at the start of your <script> tag, before you "export default ...
+import { mapGetters } from 'vuex';
 export default {
   props: ["id"],
     data() {
@@ -42,6 +43,9 @@ export default {
         userEmailValidity: "pending",
         userTextValidity: "pending",
       };
+    },
+    computed: {
+    ...mapGetters(['token']),
     },
     methods: {
       validacionEmail() {
@@ -64,7 +68,7 @@ export default {
         this.validacionText();
         if (this.userEmailValidity === "valid" && this.userTextValidity === "valid") {
         axios.post(
-          'https://vue-http-demo-ce2b5-default-rtdb.firebaseio.com/request.json',
+          `https://vue-http-demo-ce2b5-default-rtdb.firebaseio.com/request/${this.$route.params.id}.json?auth` + this.token,
           {
             id: new Date().toISOString(),
             email: this.enteredEmail,

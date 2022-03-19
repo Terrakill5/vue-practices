@@ -31,9 +31,9 @@ export default {
     RequestItem,
   },
   computed: {
-    ...mapGetters(['requests', 'hayRequests']),
-    hayRequestsAca(){
-      return !this.isLoading && this.hayRequests
+    ...mapGetters(['requests', 'hayRequests',"userId"]),
+    hayRequestsAca() {
+      return !this.isLoading && this.hayRequests;
     },
   },
   data() {
@@ -47,7 +47,8 @@ export default {
       this.isLoading = true;
       try {
         const res = await axios.get(
-          'https://vue-http-demo-ce2b5-default-rtdb.firebaseio.com/request.json'
+          "https://vue-http-demo-ce2b5-default-rtdb.firebaseio.com/request.json"
+          //`https://vue-http-demo-ce2b5-default-rtdb.firebaseio.com/request/${this.userId}.json?auth` + this.token
         );
         console.log(res);
         const array = Object.values(res.data); //pasa todos los objetos en un array
@@ -60,7 +61,7 @@ export default {
     },
     handleError() {
       this.error = null;
-    }
+    },
   },
   mounted() {
     this.loadRequest();

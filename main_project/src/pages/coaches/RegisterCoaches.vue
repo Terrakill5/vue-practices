@@ -31,45 +31,45 @@
       <label for="desc">Your Description as Coach</label>
       <input type="text" id="desc" name="desc" v-model.trim="enteredDesc" />
 
-    <div
+      <div
         class="form-control"
-        :class="{ invalid: userRateValidity === 'invalid' }">
-      <label for="rate">Your Rate as Coach</label>
-      <input type="number" id="rate" name="rate" v-model.trim="enteredRate" />
-      <p v-if="userRateValidity === 'invalid'">
-          Please enter a valid rate!
-        </p>
+        :class="{ invalid: userRateValidity === 'invalid' }"
+      >
+        <label for="rate">Your Rate as Coach</label>
+        <input type="number" id="rate" name="rate" v-model.trim="enteredRate" />
+        <p v-if="userRateValidity === 'invalid'">Please enter a valid rate!</p>
       </div>
 
-<div
+      <div
         class="form-control"
-        :class="{ invalid: userEspecValidity === 'invalid' }">
-      <label for="espec">Your especializations</label> <br>
-      <input
-        id="frontend"
-        name="especial"
-        type="checkbox"
-        value="frontend"
-        v-model="enteredEspec"
-      />
-      <label for="frontend">Frontend</label>
-      <input
-        id="backend"
-        name="especial"
-        type="checkbox"
-        value="backend"
-        v-model="enteredEspec"
-      />
-      <label for="backend">Backend</label>
-      <input
-        id="career"
-        name="especial"
-        type="checkbox"
-        value="career"
-        v-model="enteredEspec"
-      />
-      <label for="career">Career</label>
-      <p v-if="userEspecValidity === 'invalid'">
+        :class="{ invalid: userEspecValidity === 'invalid' }"
+      >
+        <label for="espec">Your especializations</label> <br />
+        <input
+          id="frontend"
+          name="especial"
+          type="checkbox"
+          value="frontend"
+          v-model="enteredEspec"
+        />
+        <label for="frontend">Frontend</label>
+        <input
+          id="backend"
+          name="especial"
+          type="checkbox"
+          value="backend"
+          v-model="enteredEspec"
+        />
+        <label for="backend">Backend</label>
+        <input
+          id="career"
+          name="especial"
+          type="checkbox"
+          value="career"
+          v-model="enteredEspec"
+        />
+        <label for="career">Career</label>
+        <p v-if="userEspecValidity === 'invalid'">
           Please check any especialization!
         </p>
       </div>
@@ -79,6 +79,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import axios from 'axios'; // at the start of your <script> tag, before you "export default ..."
 export default {
   data() {
@@ -91,9 +92,12 @@ export default {
       validity: null,
       userNameValidity: 'pending',
       userLastValidity: 'pending',
-      userRateValidity: "pending",
-      userEspecValidity: "pending",
+      userRateValidity: 'pending',
+      userEspecValidity: 'pending',
     };
+  },
+  computed: {
+    ...mapGetters(['userId', 'token']),
   },
   methods: {
     validacionNombre() {
@@ -111,17 +115,17 @@ export default {
       }
     },
     validacionRate() {
-      if (this.enteredRate > 0 && this.enteredRate < 1000){
-        this.userRateValidity = "valid";
+      if (this.enteredRate > 0 && this.enteredRate < 1000) {
+        this.userRateValidity = 'valid';
       } else {
-        this.userRateValidity = "invalid";
+        this.userRateValidity = 'invalid';
       }
     },
     validacionEspec() {
       if (this.enteredEspec && this.enteredEspec.length > 0) {
-        this.userEspecValidity = "valid";
+        this.userEspecValidity = 'valid';
       } else {
-        this.userEspecValidity = "invalid";
+        this.userEspecValidity = 'invalid';
       }
     },
     submitCoach() {
@@ -129,9 +133,16 @@ export default {
       this.validacionApe();
       this.validacionRate();
       this.validacionEspec();
-      if (this.userNameValidity === "valid" && this.userLastValidity === "valid" && this.userRateValidity === "valid" && this.userEspecValidity === "valid") {
+      console.log("este es el token" + this.token);
+      if (
+        this.userNameValidity === 'valid' &&
+        this.userLastValidity === 'valid' &&
+        this.userRateValidity === 'valid' &&
+        this.userEspecValidity === 'valid'
+      ) {
         axios.post(
-          'https://vue-http-demo-ce2b5-default-rtdb.firebaseio.com/surveys.json',
+          `https://vue-http-demo-ce2b5-default-rtdb.firebaseio.com/surveys/${this.userId}.json?auth=` +
+            this.token,
           {
             id: new Date().toISOString(),
             firstName: this.enteredName,
@@ -146,8 +157,8 @@ export default {
         this.enteredDesc = '';
         this.enteredRate = '';
         this.enteredEspec = null;
-        this.$router.replace("/coaches");
-      } 
+        this.$router.replace('/coaches');
+      }
     },
   },
 };
