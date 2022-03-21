@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   data() {
     return {
@@ -41,7 +42,7 @@ export default {
     };
   },
   computed: {
-    submitButtonCaption() {
+      submitButtonCaption() {
       if (this.mode === 'login') {
         return 'Login';
       } else {
@@ -57,6 +58,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions("auth",["login","signup"]),
     async submitForm() {
       this.formIsValid = true;
       if (
@@ -76,9 +78,11 @@ export default {
 
       try {
         if (this.mode === 'login') {
-          await this.$store.dispatch('login', actionPayload );
+          //await this.$store.dispatch('login', actionPayload );
+          await this.login(actionPayload);
         } else {
-          await this.$store.dispatch('signup', actionPayload);
+          //await this.$store.dispatch('signup', actionPayload);
+          await this.signup(actionPayload);
         }
       } catch (err) {
         this.error = err.message || 'Failed to authenticate, try later';

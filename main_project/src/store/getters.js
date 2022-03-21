@@ -17,8 +17,5 @@ export default {
         //console.log(state.coaches.length);
         return getters.requests && getters.requests.length > 0;
     },
-    userId(state) {
-        return state.userId;
-    }
 
 }

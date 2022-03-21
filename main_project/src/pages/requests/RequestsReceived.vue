@@ -31,7 +31,8 @@ export default {
     RequestItem,
   },
   computed: {
-    ...mapGetters(['requests', 'hayRequests',"userId"]),
+    ...mapGetters(['requests', 'hayRequests']),
+    ...mapGetters("auth",["userId"]),
     hayRequestsAca() {
       return !this.isLoading && this.hayRequests;
     },
@@ -47,7 +48,7 @@ export default {
       this.isLoading = true;
       try {
         const res = await axios.get(
-          "https://vue-http-demo-ce2b5-default-rtdb.firebaseio.com/request.json"
+          'https://vue-http-demo-ce2b5-default-rtdb.firebaseio.com/request.json'
           //`https://vue-http-demo-ce2b5-default-rtdb.firebaseio.com/request/${this.userId}.json?auth` + this.token
         );
         console.log(res);

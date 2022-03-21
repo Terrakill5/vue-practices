@@ -43,6 +43,7 @@
 import CoachItem from '../../components/CoachItem.vue';
 import axios from 'axios';
 import { mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 import FilterCoaches from '../../components/FilterCoaches.vue';
 
 export default {
@@ -63,10 +64,12 @@ export default {
   },
   computed: {
     ...mapGetters(['coaches', 'hayCoaches', "filtro"]),
+    ...mapGetters("auth",["userId"]),
     hayCoachesAca(){
       return !this.isLoading && this.hayCoaches
     },
     filteredCoaches() {
+      //console.log(this.coaches);
       return this.coaches.filter(coach => {
         if (this.activeFilters.frontend && coach.especialization.includes("frontend")) {
           return true;
@@ -82,14 +85,17 @@ export default {
     }
   },
   methods: {
+    ...mapActions(["actualizarCoaches"]),
     async loadCoaches() {
       this.isLoading = true;
       try {
         const res = await axios.get(
-        'https://vue-http-demo-ce2b5-default-rtdb.firebaseio.com/surveys.json'
+        `https://vue-http-demo-ce2b5-default-rtdb.firebaseio.com/surveys.json`
       );
-      const array = Object.values(res.data);
-      this.$store.dispatch('actualizarCoaches',  array );
+      //const array = Object.values(res.data);
+      //console.log(array);
+      //this.actualizarCoaches(array);
+      this.actualizarCoaches(res.data);
       } catch (error) {
         this.error = error.message || "something went wrong";
       }

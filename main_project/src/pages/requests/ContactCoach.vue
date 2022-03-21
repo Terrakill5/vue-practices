@@ -19,8 +19,12 @@
       :class="{ errors: userTextValidity === 'invalid' }"
     >
       <label for="text">Your Commentary</label>
-      <textarea rows="5" id="text" v-model.trim="enteredText"
-        @blur="validateText"></textarea>
+      <textarea
+        rows="5"
+        id="text"
+        v-model.trim="enteredText"
+        @blur="validateText"
+      ></textarea>
       <p v-if="userTextValidity === 'invalid'">
         Please enter a valid commentary!
       </p>
@@ -35,54 +39,61 @@
 import axios from 'axios'; // at the start of your <script> tag, before you "export default ...
 import { mapGetters } from 'vuex';
 export default {
-  props: ["id"],
-    data() {
-      return {
-        enteredEmail: "",
-        enteredText: "",
-        userEmailValidity: "pending",
-        userTextValidity: "pending",
-      };
-    },
-    computed: {
-    ...mapGetters(['token']),
-    },
-    methods: {
-      validacionEmail() {
-      if (this.enteredEmail === '' || !this.enteredEmail.includes("@")) {
+  props: ['id'],
+  data() {
+    return {
+      enteredEmail: '',
+      enteredText: '',
+      userEmailValidity: 'pending',
+      userTextValidity: 'pending',
+    };
+  },
+  computed: {
+    ...mapGetters('auth', ['token']),
+  },
+  methods: {
+    validacionEmail() {
+      if (this.enteredEmail === '' || !this.enteredEmail.includes('@')) {
         this.userEmailValidity = 'invalid';
       } else {
         this.userEmailValidity = 'valid';
       }
-      },
-      validacionText() {
+    },
+    validacionText() {
       if (this.enteredText === '') {
         this.userTextValidity = 'invalid';
       } else {
         this.userTextValidity = 'valid';
       }
-      },
-      submitRequest(){
-        //console.log(this.$route.params.id);
-        this.validacionEmail();
-        this.validacionText();
-        if (this.userEmailValidity === "valid" && this.userTextValidity === "valid") {
+    },
+    submitRequest() {
+      //console.log(this.$route.params.id);
+      this.validacionEmail();
+      this.validacionText();
+      //console.log(this.$route.params.id);
+      //console.log(this.token);
+      const coachId = this.$route.params.id;
+      if (
+        this.userEmailValidity === 'valid' &&
+        this.userTextValidity === 'valid'
+      ) {
         axios.post(
-          `https://vue-http-demo-ce2b5-default-rtdb.firebaseio.com/request/${this.$route.params.id}.json?auth` + this.token,
+          `https://vue-http-demo-ce2b5-default-rtdb.firebaseio.com/request/${coachId}.json?auth` +
+            this.token,
           {
             id: new Date().toISOString(),
             email: this.enteredEmail,
             text: this.enteredText,
-            coachId: this.$route.params.id,
+            //coachId: this.$route.params.id
           }
         );
         this.enteredEmail = '';
         this.enteredText = '';
-        this.$router.replace("/coaches");
-        }
-      },
+        this.$router.replace('/coaches');
+      }
     },
-}
+  },
+};
 </script>
 
 <style scoped>

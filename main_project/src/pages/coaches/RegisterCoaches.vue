@@ -97,7 +97,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['userId', 'token']),
+    ...mapGetters("auth",['userId', 'token']),
   },
   methods: {
     validacionNombre() {
@@ -133,7 +133,7 @@ export default {
       this.validacionApe();
       this.validacionRate();
       this.validacionEspec();
-      console.log("este es el token" + this.token);
+      //console.log("este es el token" + this.token);
       if (
         this.userNameValidity === 'valid' &&
         this.userLastValidity === 'valid' &&
